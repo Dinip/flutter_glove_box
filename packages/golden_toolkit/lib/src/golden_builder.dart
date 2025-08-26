@@ -43,6 +43,7 @@ abstract class GoldenBuilder {
 
   static table({
     required int columns,
+    double rowSpacing = 16.0,
     WidgetWrapper? wrap,
     Color? bgColor,
   }) {
@@ -50,6 +51,7 @@ abstract class GoldenBuilder {
       columns: columns,
       wrap: wrap,
       bgColor: bgColor,
+      rowSpacing: rowSpacing,
     );
   }
 

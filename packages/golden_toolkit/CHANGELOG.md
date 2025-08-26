@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.2
+
+- Add missing spacing parameter in static method
+
 ## 0.16.1
 
 - Add spacing between table cells in GoldenBuilder.table()
