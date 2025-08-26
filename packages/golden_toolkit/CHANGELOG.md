@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.1
+
+- Add spacing between table cells in GoldenBuilder.table()
+
 ## 0.16.0
 
 - Update to Dart 3.0 and newer dependencies

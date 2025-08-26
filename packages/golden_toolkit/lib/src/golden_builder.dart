@@ -149,12 +149,14 @@ class _Scenario extends StatelessWidget {
 class GoldenBuilderTable extends GoldenBuilder {
   GoldenBuilderTable({
     required this.columns,
+    this.rowSpacing = 16.0,
     super.wrap,
     super.bgColor,
   });
 
   /// number of columns [columns] in a grid
   final int columns;
+  final double rowSpacing;
 
   int get _effectiveRows => (scenarios.length / columns).ceil();
 
@@ -167,7 +169,11 @@ class GoldenBuilderTable extends GoldenBuilder {
           TableRow(
             children: [
               for (int j = 0; j < columns; j++)
-                if (i * columns + j < scenarios.length) scenarios[i * columns + j] else const SizedBox.shrink(),
+                if (i * columns + j < scenarios.length) ...[
+                  scenarios[i * columns + j],
+                  if (j < columns - 1) SizedBox(width: rowSpacing),
+                ] else
+                  const SizedBox.shrink(),
             ],
           ),
       ],
