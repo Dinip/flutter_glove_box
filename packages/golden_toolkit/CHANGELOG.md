@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.16.0
+
+- Update to Dart 3.0 and newer dependencies
+- Add GoldenBuilder.table() to replace GoldenBuilder.grid()
+
 ## 0.15.0
 
 - BugFix: device pixel ratio will be properly taken into consideration when generating golden images. Thanks to @BenVercammen

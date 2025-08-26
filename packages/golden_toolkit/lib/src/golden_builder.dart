@@ -5,6 +5,7 @@
 /// license that can be found in the LICENSE file or at
 /// https://opensource.org/licenses/BSD-3-Clause
 /// ***************************************************
+
 import 'package:flutter/widgets.dart';
 
 import 'testing_tools.dart';
@@ -13,23 +14,26 @@ import 'testing_tools.dart';
 const double textScaleFactorMaxSupported = 3.2;
 
 /// GoldenBuilder builds column/grid layout for it's children
-class GoldenBuilder {
-  /// Will output a *.png file with a grid layout in 'tests/goldens' folder.
-  ///
-  /// You need to specify how many columns [columns] and widthToHeight ratio [widthToHeightRatio]
-  ///
-  /// [widthToHeightRatio] can range from 0.0 to 1.0
-  ///
-  /// [wrap] (optional) will wrap the scenario's widget in the tree.
-  ///
-  /// [bgColor] will change the background color of output .png file
-  factory GoldenBuilder.grid({
+abstract class GoldenBuilder {
+  GoldenBuilder({this.wrap, this.bgColor});
+
+  static column({
+    WidgetWrapper? wrap,
+    Color? bgColor,
+  }) {
+    return GoldenBuilderColumn(
+      wrap: wrap,
+      bgColor: bgColor,
+    );
+  }
+
+  static grid({
     required int columns,
     required double widthToHeightRatio,
     WidgetWrapper? wrap,
     Color? bgColor,
   }) {
-    return GoldenBuilder._(
+    return GoldenBuilderGrid(
       columns: columns,
       widthToHeightRatio: widthToHeightRatio,
       wrap: wrap,
@@ -37,41 +41,24 @@ class GoldenBuilder {
     );
   }
 
-  /// Will output a .png file with a column layout in 'tests/goldens' folder.
-  ///
-  /// [wrap] (optional) will wrap the scenario's widget in the tree.
-  ///
-  /// [bgColor] will change the background color of output .png file
-  ///
-  factory GoldenBuilder.column({
-    Color? bgColor,
+  static table({
+    required int columns,
     WidgetWrapper? wrap,
+    Color? bgColor,
   }) {
-    return GoldenBuilder._(
+    return GoldenBuilderTable(
+      columns: columns,
       wrap: wrap,
       bgColor: bgColor,
     );
   }
 
-  GoldenBuilder._({
-    this.columns = 1,
-    this.widthToHeightRatio = 1.0,
-    this.wrap,
-    this.bgColor,
-  });
-
   /// Can be used to wrap all scenario widgets. Useful if you wish to
   /// provide consistent UI treatment to all of them or need to inject dependencies.
   final WidgetWrapper? wrap;
 
-  /// number of columns [columns] in a grid
-  final int columns;
-
   ///  background [bgColor] color of output .png file
   final Color? bgColor;
-
-  ///  [widthToHeightRatio]  grid layout
-  final double widthToHeightRatio;
 
   ///  List of tests [scenarios]  being run within GoldenBuilder
   final List<Widget> scenarios = [];
@@ -108,13 +95,14 @@ class GoldenBuilder {
   ///     return Container(color: color);
   ///   },
   /// )
-  void addScenarioBuilder(
-      String name, Widget Function(BuildContext context) fn) {
+  void addScenarioBuilder(String name, Widget Function(BuildContext context) fn) {
     addScenario(
       name,
       Builder(builder: fn),
     );
   }
+
+  Widget _buildInternal();
 
   ///  [build] will build a list of [scenarios]  with a given layout
   Widget build() {
@@ -123,24 +111,10 @@ class GoldenBuilder {
       child: Container(
         padding: const EdgeInsets.all(8),
         color: bgColor ?? const Color(0xFFEEEEEE),
-        child: columns == 1 ? _column() : _grid(),
+        child: _buildInternal(),
       ),
     );
   }
-
-  GridView _grid() {
-    return GridView.count(
-      childAspectRatio: widthToHeightRatio,
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
-      shrinkWrap: true,
-      crossAxisCount: columns,
-      children: scenarios,
-    );
-  }
-
-  Column _column() =>
-      Column(mainAxisSize: MainAxisSize.min, children: scenarios);
 }
 
 class _Scenario extends StatelessWidget {
@@ -172,11 +146,90 @@ class _Scenario extends StatelessWidget {
   }
 }
 
+class GoldenBuilderTable extends GoldenBuilder {
+  GoldenBuilderTable({
+    required this.columns,
+    super.wrap,
+    super.bgColor,
+  });
+
+  /// number of columns [columns] in a grid
+  final int columns;
+
+  int get _effectiveRows => (scenarios.length / columns).ceil();
+
+  @override
+  Widget _buildInternal() {
+    return Table(
+      defaultColumnWidth: const IntrinsicColumnWidth(),
+      children: [
+        for (int i = 0; i < _effectiveRows; i++)
+          TableRow(
+            children: [
+              for (int j = 0; j < columns; j++)
+                if (i * columns + j < scenarios.length) scenarios[i * columns + j] else const SizedBox.shrink(),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class GoldenBuilderGrid extends GoldenBuilder {
+  /// Will output a *.png file with a grid layout in 'tests/goldens' folder.
+  ///
+  /// You need to specify how many columns [columns] and widthToHeight ratio [widthToHeightRatio]
+  ///
+  /// [widthToHeightRatio] can range from 0.0 to 1.0
+  ///
+  /// [wrap] (optional) will wrap the scenario's widget in the tree.
+  ///
+  /// [bgColor] will change the background color of output .png file
+  GoldenBuilderGrid({
+    required this.columns,
+    required this.widthToHeightRatio,
+    super.wrap,
+    super.bgColor,
+  });
+
+  /// number of columns [columns] in a grid
+  final int columns;
+
+  ///  [widthToHeightRatio]  grid layout
+  final double widthToHeightRatio;
+
+  @override
+  Widget _buildInternal() {
+    return GridView.count(
+      childAspectRatio: widthToHeightRatio,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      shrinkWrap: true,
+      crossAxisCount: columns,
+      children: scenarios,
+    );
+  }
+}
+
+class GoldenBuilderColumn extends GoldenBuilder {
+  /// Will output a .png file with a column layout in 'tests/goldens' folder.
+  ///
+  /// [wrap] (optional) will wrap the scenario's widget in the tree.
+  ///
+  /// [bgColor] will change the background color of output .png file
+  ///
+  GoldenBuilderColumn({super.bgColor, super.wrap});
+
+  @override
+  Widget _buildInternal() => Column(mainAxisSize: MainAxisSize.min, children: scenarios);
+}
+
 class _TextScaleFactor extends StatelessWidget {
   const _TextScaleFactor({
     required this.textScaleFactor,
     required this.child,
   });
+
   final Widget child;
   final double textScaleFactor;
 
