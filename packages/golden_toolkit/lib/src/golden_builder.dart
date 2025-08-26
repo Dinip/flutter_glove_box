@@ -5,7 +5,6 @@
 /// license that can be found in the LICENSE file or at
 /// https://opensource.org/licenses/BSD-3-Clause
 /// ***************************************************
-import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
@@ -16,11 +15,7 @@ const double textScaleFactorMaxSupported = 3.2;
 
 /// GoldenBuilder builds column/grid layout for it's children
 abstract class GoldenBuilder {
-  GoldenBuilder({
-    this.widthToHeightRatio = 1.0,
-    this.wrap,
-    this.bgColor,
-  });
+  GoldenBuilder({this.wrap, this.bgColor});
 
   static column({
     WidgetWrapper? wrap,
@@ -64,9 +59,6 @@ abstract class GoldenBuilder {
 
   ///  background [bgColor] color of output .png file
   final Color? bgColor;
-
-  ///  [widthToHeightRatio]  grid layout
-  final double widthToHeightRatio;
 
   ///  List of tests [scenarios]  being run within GoldenBuilder
   final List<Widget> scenarios = [];
@@ -195,13 +187,16 @@ class GoldenBuilderGrid extends GoldenBuilder {
   /// [bgColor] will change the background color of output .png file
   GoldenBuilderGrid({
     required this.columns,
-    required super.widthToHeightRatio,
+    required this.widthToHeightRatio,
     super.wrap,
     super.bgColor,
   });
 
   /// number of columns [columns] in a grid
   final int columns;
+
+  ///  [widthToHeightRatio]  grid layout
+  final double widthToHeightRatio;
 
   @override
   Widget _buildInternal() {
