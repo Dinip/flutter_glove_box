@@ -47,20 +47,6 @@ abstract class GoldenBuilder {
     );
   }
 
-  static table({
-    required int columns,
-    double rowSpacing = 16.0,
-    WidgetWrapper? wrap,
-    Color? bgColor,
-  }) {
-    return GoldenBuilderTable(
-      columns: columns,
-      wrap: wrap,
-      bgColor: bgColor,
-      rowSpacing: rowSpacing,
-    );
-  }
-
   /// Can be used to wrap all scenario widgets. Useful if you wish to
   /// provide consistent UI treatment to all of them or need to inject dependencies.
   final WidgetWrapper? wrap;
