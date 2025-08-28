@@ -121,14 +121,11 @@ Future<void> _pumpAppWidget(
   required double textScaleSize,
 }) async {
   await tester.binding.setSurfaceSize(surfaceSize);
-  tester.binding.window.physicalSizeTestValue = surfaceSize;
-  tester.binding.window.devicePixelRatioTestValue = 1.0;
-  tester.binding.window.platformDispatcher.textScaleFactorTestValue =
-      textScaleSize;
+  tester.view.physicalSize = surfaceSize;
+  tester.view.devicePixelRatio = 1.0;
+  tester.platformDispatcher.textScaleFactorTestValue = textScaleSize;
 
-  await tester.pumpWidget(
-    DefaultAssetBundle(bundle: TestAssetBundle(), child: app),
-  );
+  await tester.pumpWidget(DefaultAssetBundle(bundle: TestAssetBundle(), child: app));
   await tester.pump();
 }
 
@@ -160,8 +157,7 @@ void testGoldens(
       Future<void> body() async {
         _inGoldenTest = true;
         final initialDebugDisableShadowsValue = debugDisableShadows;
-        final shouldUseRealShadows =
-            GoldenToolkit.configuration.enableRealShadows;
+        final shouldUseRealShadows = GoldenToolkit.configuration.enableRealShadows;
         debugDisableShadows = !shouldUseRealShadows;
         try {
           await test(tester);
@@ -205,8 +201,9 @@ Future<void> screenMatchesGolden(
   bool? autoHeight,
   Finder? finder,
   CustomPump? customPump,
-  @Deprecated('This method level parameter will be removed in an upcoming release. This can be configured globally. If you have concerns, please file an issue with your use case.')
-      bool? skip,
+  @Deprecated(
+      'This method level parameter will be removed in an upcoming release. This can be configured globally. If you have concerns, please file an issue with your use case.')
+  bool? skip,
 }) {
   return compareWithGolden(
     tester,
@@ -218,8 +215,7 @@ Future<void> screenMatchesGolden(
     // This value is actually ignored. We are forced to pass it because the
     // downstream API is structured poorly. This should be refactored.
     device: Device.phone,
-    fileNameFactory: (String name, Device device) =>
-        GoldenToolkit.configuration.fileNameFactory(name),
+    fileNameFactory: (String name, Device device) => GoldenToolkit.configuration.fileNameFactory(name),
   );
 }
 
@@ -242,15 +238,14 @@ Future<void> compareWithGolden(
     fail(
         'Golden tests MUST be run within a testGoldens method, not just a testWidgets method. This is so we can be confident that running "flutter test --name=GOLDEN" will run all golden tests.');
   }
-  final shouldSkipGoldenGeneration =
-      skip ?? GoldenToolkit.configuration.skipGoldenAssertion();
+  final shouldSkipGoldenGeneration = skip ?? GoldenToolkit.configuration.skipGoldenAssertion();
 
   final pumpAfterPrime = customPump ?? _onlyPumpAndSettle;
   /* if no finder is specified, use the first widget. Note, there is no guarantee this evaluates top-down, but in theory if all widgets are in the same
   RepaintBoundary, it should not matter */
   final actualFinder = finder ?? find.byWidgetPredicate((w) => true).first;
   final fileName = fileNameFactory(name, device);
-  final originalWindowSize = tester.binding.window.physicalSize;
+  final originalWindowSize = tester.view.physicalSize;
 
   if (!shouldSkipGoldenGeneration) {
     await tester.waitForAssets();
@@ -261,10 +256,7 @@ Future<void> compareWithGolden(
   if (autoHeight == true) {
     // Find the first scrollable element which can be scrolled vertical.
     // ListView, SingleChildScrollView, CustomScrollView? are implemented using a Scrollable widget.
-    final scrollable = find
-        .byType(Scrollable)
-        .evaluate()
-        .map<ScrollableState?>((Element element) {
+    final scrollable = find.byType(Scrollable).evaluate().map<ScrollableState?>((Element element) {
       if (element is StatefulElement) {
         final state = element.state;
         if (state is ScrollableState) {
@@ -288,7 +280,7 @@ Future<void> compareWithGolden(
 
     final adjustedSize = Size(originalWindowSize.width, finalHeight);
     await tester.binding.setSurfaceSize(adjustedSize);
-    tester.binding.window.physicalSizeTestValue = adjustedSize;
+    tester.view.physicalSize = adjustedSize;
 
     await tester.pump();
   }
@@ -302,7 +294,7 @@ Future<void> compareWithGolden(
   if (autoHeight == true) {
     // Here we reset the window size to its original value to be clean
     await tester.binding.setSurfaceSize(originalWindowSize);
-    tester.binding.window.physicalSizeTestValue = originalWindowSize;
+    tester.view.physicalSize = originalWindowSize;
   }
 }
 
@@ -339,8 +331,7 @@ Future<void> legacyPrimeAssets(WidgetTester tester) async {
 /// * [GoldenToolkitConfiguration.primeAssets] to configure a global asset prime function.
 Future<void> defaultPrimeAssets(WidgetTester tester) async {
   final imageElements = find.byType(Image, skipOffstage: false).evaluate();
-  final containerElements =
-      find.byType(DecoratedBox, skipOffstage: false).evaluate();
+  final containerElements = find.byType(DecoratedBox, skipOffstage: false).evaluate();
   await tester.runAsync(() async {
     for (final imageElement in imageElements) {
       final widget = imageElement.widget;
@@ -360,5 +351,4 @@ Future<void> defaultPrimeAssets(WidgetTester tester) async {
   });
 }
 
-Future<void> _onlyPumpAndSettle(WidgetTester tester) async =>
-    tester.pumpAndSettle();
+Future<void> _onlyPumpAndSettle(WidgetTester tester) async => tester.pumpAndSettle();
