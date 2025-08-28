@@ -4,6 +4,7 @@
 
 - Add support for custom table widths
 - Remove deprecated `GoldenBuilder.table()` in favor of using `GoldenBuilderTable` directly
+- Add `GoldenBuilderSingle` for single scenario where columns cause issues
 
 ## 0.16.2
 
