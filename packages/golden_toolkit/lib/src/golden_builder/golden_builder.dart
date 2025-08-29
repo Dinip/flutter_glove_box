@@ -21,7 +21,7 @@ const double textScaleFactorMaxSupported = 3.2;
 
 /// GoldenBuilder builds column/grid layout for it's children
 abstract class GoldenBuilder {
-  GoldenBuilder({this.wrap, this.bgColor = const Color(0xFFEEEEEE)});
+  GoldenBuilder({this.wrap, this.bgColor});
 
   static column({
     WidgetWrapper? wrap,
@@ -99,7 +99,7 @@ abstract class GoldenBuilder {
       alignment: Alignment.topLeft,
       child: Container(
         padding: const EdgeInsets.all(8),
-        color: bgColor,
+        color: bgColor ?? const Color(0xFFEEEEEE),
         child: _buildInternal(),
       ),
     );
