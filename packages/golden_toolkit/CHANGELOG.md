@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.4
+
+- Revert default background color change in GoldenBuilder
+
 ## 0.16.3
 
 - Add support for custom table widths
