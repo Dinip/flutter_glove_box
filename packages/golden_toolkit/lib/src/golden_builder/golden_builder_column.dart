@@ -1,4 +1,5 @@
 part of 'golden_builder.dart';
+
 class GoldenBuilderColumn extends GoldenBuilder {
   /// Will output a .png file with a column layout in 'tests/goldens' folder.
   ///
