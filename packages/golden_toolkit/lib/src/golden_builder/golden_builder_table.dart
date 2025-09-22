@@ -1,6 +1,16 @@
 part of 'golden_builder.dart';
 
+typedef TableColumnWidthMap = Map<int, TableColumnWidth>;
+
 class GoldenBuilderTable extends GoldenBuilder {
+  static TableColumnWidthMap flexibleColumns(int count) {
+    return {for (var index in List.generate(count, (index) => index)) index: const FlexColumnWidth(1)};
+  }
+
+  static TableColumnWidthMap fixedColumns({required int count, required double columnWidth}) {
+    return {for (var index in List.generate(count, (index) => index)) index: FixedColumnWidth(columnWidth)};
+  }
+
   GoldenBuilderTable({
     required this.columns,
     this.rowSpacing = 16.0,
@@ -17,7 +27,8 @@ class GoldenBuilderTable extends GoldenBuilder {
 
   /// column widths for the actual content columns
   /// if a column width is not provided, it will default to IntrinsicColumnWidth
-  final Map<int, TableColumnWidth> columnWidths;
+  /// GoldenBuilderTable.flexibleColumns() and GoldenBuilderTable.fixedColumns() are available, as helpers.
+  final TableColumnWidthMap columnWidths;
 
   int get _effectiveRows => (scenarios.length / columns).ceil();
 
@@ -28,7 +39,7 @@ class GoldenBuilderTable extends GoldenBuilder {
   /// columnWidths will be {0: FlexColumnWidth(1), 1: FixedColumnWidth(rowSpacing), 2: FlexColumnWidth(1)}
   /// if a column width is not provided, it will default to IntrinsicColumnWidth
   /// spacing columns are always FixedColumnWidth(rowSpacing)
-  Map<int, TableColumnWidth> _effectiveColumnWidths() {
+  TableColumnWidthMap _effectiveColumnWidths() {
     final widths = <int, TableColumnWidth>{};
     for (int i = 0; i < columns; i++) {
       widths[i * 2] = columnWidths[i] ?? const IntrinsicColumnWidth();

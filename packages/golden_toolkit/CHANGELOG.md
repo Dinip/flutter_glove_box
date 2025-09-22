@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.5
+
+- Deprecate GoldenBuilder.grid() in favor of GoldenBuilder.table()
+
 ## 0.16.4
 
 - Revert default background color change in GoldenBuilder

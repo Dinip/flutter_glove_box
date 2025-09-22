@@ -23,6 +23,7 @@ const double textScaleFactorMaxSupported = 3.2;
 abstract class GoldenBuilder {
   GoldenBuilder({this.wrap, this.bgColor});
 
+  @Deprecated('Favor using GoldenBuilderColumn instead. The parameters are the same')
   static column({
     WidgetWrapper? wrap,
     Color? bgColor,
@@ -33,6 +34,11 @@ abstract class GoldenBuilder {
     );
   }
 
+  @Deprecated('''
+  Favor using GoldenBuilderTable instead, since it behaves correctly with autoHeight: true.
+  Parameters are mostly the same, except widthToHeightRatio which is not required anymore.
+  GoldenBuilderTable.flexibleColumns() and GoldenBuilderTable.fixedColumns() are available, as helpers.
+  ''')
   static grid({
     required int columns,
     required double widthToHeightRatio,
