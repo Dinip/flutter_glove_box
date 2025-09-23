@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.16.5
+
+- Deprecate GoldenBuilder.column() in favor of GoldenBuilderColumn()
+- Deprecate GoldenBuilder.grid() in favor of GoldenBuilderTable()
+- Add flexibleColumns() and fixedColumns() as static helper methods on GoldenBuilderTable for easier configuration of column widths
+- Rename rowSpacing to columnSpacing
+
 ## 0.16.4
 
 - Revert default background color change in GoldenBuilder

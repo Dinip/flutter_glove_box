@@ -23,6 +23,9 @@ const double textScaleFactorMaxSupported = 3.2;
 abstract class GoldenBuilder {
   GoldenBuilder({this.wrap, this.bgColor});
 
+  @Deprecated('''-
+  Instantiate GoldenBuilderColumn directly instead, the parameters are the same.
+  -''')
   static column({
     WidgetWrapper? wrap,
     Color? bgColor,
@@ -33,6 +36,12 @@ abstract class GoldenBuilder {
     );
   }
 
+  @Deprecated('''-
+  Instantiate GoldenBuilderTable instead, since it behaves correctly with autoHeight: true.
+  Parameters are mostly the same, except widthToHeightRatio which is not required anymore.
+  Be aware, that by default, table uses IntrinsicColumnWidth for columns, so if you want
+  to have equally distributed columns, you can use GoldenBuilderTable.flexibleColumns() helper.
+  -''')
   static grid({
     required int columns,
     required double widthToHeightRatio,
