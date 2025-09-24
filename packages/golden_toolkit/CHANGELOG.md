@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.6
+
+- Add CrossAxisAlignment support to GoldenBuilderColumn
+
 ## 0.16.5
 
 - Deprecate GoldenBuilder.column() in favor of GoldenBuilderColumn()
