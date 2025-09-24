@@ -7,8 +7,16 @@ class GoldenBuilderColumn extends GoldenBuilder {
   ///
   /// [bgColor] will change the background color of output .png file
   ///
-  GoldenBuilderColumn({super.bgColor, super.wrap});
+  GoldenBuilderColumn({super.bgColor, super.wrap, this.crossAxisAlignment = CrossAxisAlignment.center});
+
+  final CrossAxisAlignment crossAxisAlignment;
 
   @override
-  Widget _buildInternal() => Column(mainAxisSize: MainAxisSize.min, children: scenarios);
+  Widget _buildInternal() {
+    return Column(
+      crossAxisAlignment: crossAxisAlignment,
+      mainAxisSize: MainAxisSize.min,
+      children: scenarios,
+    );
+  }
 }
