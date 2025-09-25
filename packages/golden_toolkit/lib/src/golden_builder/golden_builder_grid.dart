@@ -15,6 +15,7 @@ class GoldenBuilderGrid extends GoldenBuilder {
     required this.widthToHeightRatio,
     super.wrap,
     super.bgColor,
+    super.titleTextStyle,
   });
 
   /// number of columns [columns] in a grid

@@ -7,7 +7,7 @@ class GoldenBuilderSingle extends GoldenBuilder {
   ///
   /// [bgColor] will change the background color of output .png file
   ///
-  GoldenBuilderSingle({super.bgColor, super.wrap});
+  GoldenBuilderSingle({super.bgColor, super.wrap, super.titleTextStyle});
 
   static _exception() => Exception('GoldenBuilderSingle only supports one scenario. Cannot add more than one.');
 
