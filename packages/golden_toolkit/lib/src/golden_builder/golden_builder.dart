@@ -63,6 +63,7 @@ abstract class GoldenBuilder {
   ///  background [bgColor] color of output .png file
   final Color? bgColor;
 
+  /// TextStyle from the title above the Widget in each scenario
   final TextStyle titleTextStyle;
 
   ///  List of tests [scenarios]  being run within GoldenBuilder
