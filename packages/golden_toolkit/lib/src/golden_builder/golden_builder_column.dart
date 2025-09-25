@@ -7,7 +7,12 @@ class GoldenBuilderColumn extends GoldenBuilder {
   ///
   /// [bgColor] will change the background color of output .png file
   ///
-  GoldenBuilderColumn({super.bgColor, super.wrap, this.crossAxisAlignment = CrossAxisAlignment.center});
+  GoldenBuilderColumn({
+    super.bgColor,
+    super.wrap,
+    super.titleTextStyle,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+  });
 
   final CrossAxisAlignment crossAxisAlignment;
 

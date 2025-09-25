@@ -18,6 +18,7 @@ class GoldenBuilderTable extends GoldenBuilder {
     this.columnSpacing = 16.0,
     this.columnWidths = const {},
     super.wrap,
+    super.titleTextStyle,
     super.bgColor,
   });
 
