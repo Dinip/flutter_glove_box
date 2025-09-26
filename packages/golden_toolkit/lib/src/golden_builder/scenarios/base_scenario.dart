@@ -2,15 +2,16 @@ part of '../golden_builder.dart';
 
 class _BaseScenario extends StatelessWidget {
   const _BaseScenario({
-    Key? key,
     required this.name,
     required this.widget,
+    required this.titleTextStyle,
     this.wrap,
-  }) : super(key: key);
+  });
 
   final WidgetWrapper? wrap;
   final String name;
   final Widget widget;
+  final TextStyle titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,9 @@ class _BaseScenario extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
+        spacing: 4,
         children: [
-          Text(name, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 4),
+          Text(name, style: titleTextStyle),
           wrap?.call(widget) ?? widget,
         ],
       ),

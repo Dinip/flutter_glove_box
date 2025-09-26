@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.7
+
+- Add support for custom background Title textStyle in GoldenBuilders constructor
+
 ## 0.16.6
 
 - Add CrossAxisAlignment support to GoldenBuilderColumn

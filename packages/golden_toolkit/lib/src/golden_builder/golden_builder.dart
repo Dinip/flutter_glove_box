@@ -7,21 +7,23 @@
 /// ***************************************************
 
 import 'package:flutter/widgets.dart';
+
+import '../styles/golden_text_style.dart';
 import '../testing_tools.dart';
 
-part 'scenarios/base_scenario.dart';
-part 'scenarios/scale_factor_scenario.dart';
 part 'golden_builder_column.dart';
 part 'golden_builder_grid.dart';
 part 'golden_builder_single.dart';
 part 'golden_builder_table.dart';
+part 'scenarios/base_scenario.dart';
+part 'scenarios/scale_factor_scenario.dart';
 
 /// as of iOS 13.2.3 the max textScaleFactor a user can set is ~3.1176
 const double textScaleFactorMaxSupported = 3.2;
 
 /// GoldenBuilder builds column/grid layout for it's children
 abstract class GoldenBuilder {
-  GoldenBuilder({this.wrap, this.bgColor});
+  GoldenBuilder({this.wrap, this.bgColor, this.titleTextStyle = const GoldenTextStyle()});
 
   @Deprecated('''-
   Instantiate GoldenBuilderColumn directly instead, the parameters are the same.
@@ -63,6 +65,9 @@ abstract class GoldenBuilder {
   ///  background [bgColor] color of output .png file
   final Color? bgColor;
 
+  /// TextStyle from the title above the Widget in each scenario
+  final GoldenTextStyle titleTextStyle;
+
   ///  List of tests [scenarios]  being run within GoldenBuilder
   final List<Widget> scenarios = [];
 
@@ -79,6 +84,7 @@ abstract class GoldenBuilder {
   void addScenario(String name, Widget widget) {
     scenarios.add(_BaseScenario(
       name: name,
+      titleTextStyle: titleTextStyle.textStyle,
       widget: widget,
       wrap: wrap,
     ));
