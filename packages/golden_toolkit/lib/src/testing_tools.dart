@@ -198,7 +198,8 @@ void testGoldens(
 Future<void> screenMatchesGolden(
   WidgetTester tester,
   String name, {
-  bool? autoHeight,
+  bool autoHeight = false,
+  bool autoWidth = false,
   Finder? finder,
   CustomPump? customPump,
   @Deprecated(
@@ -209,6 +210,7 @@ Future<void> screenMatchesGolden(
     tester,
     name,
     autoHeight: autoHeight,
+    autoWidth: autoWidth,
     finder: finder,
     customPump: customPump,
     skip: skip,
@@ -225,7 +227,8 @@ Future<void> compareWithGolden(
   String name, {
   required DeviceFileNameFactory fileNameFactory,
   required Device device,
-  bool? autoHeight,
+  bool autoHeight = false,
+  bool autoWidth = false,
   Finder? finder,
   CustomPump? customPump,
   bool? skip,
@@ -234,15 +237,16 @@ Future<void> compareWithGolden(
     !name.endsWith('.png'),
     'Golden tests should not include file type',
   );
+
   if (!_inGoldenTest) {
     fail(
-        'Golden tests MUST be run within a testGoldens method, not just a testWidgets method. This is so we can be confident that running "flutter test --name=GOLDEN" will run all golden tests.');
+        'Golden tests MUST be run within a testGoldens method, not just a testWidgets method. This ensures "flutter test --name=GOLDEN" runs all golden tests.');
   }
-  final shouldSkipGoldenGeneration = skip ?? GoldenToolkit.configuration.skipGoldenAssertion();
 
+  final shouldSkipGoldenGeneration = skip ?? GoldenToolkit.configuration.skipGoldenAssertion();
   final pumpAfterPrime = customPump ?? _onlyPumpAndSettle;
-  /* if no finder is specified, use the first widget. Note, there is no guarantee this evaluates top-down, but in theory if all widgets are in the same
-  RepaintBoundary, it should not matter */
+
+  // Default to first widget if no finder provided
   final actualFinder = finder ?? find.byWidgetPredicate((w) => true).first;
   final fileName = fileNameFactory(name, device);
   final originalWindowSize = tester.view.physicalSize;
@@ -253,36 +257,24 @@ Future<void> compareWithGolden(
 
   await pumpAfterPrime(tester);
 
-  if (autoHeight == true) {
-    // Find the first scrollable element which can be scrolled vertical.
-    // ListView, SingleChildScrollView, CustomScrollView? are implemented using a Scrollable widget.
-    final scrollable = find.byType(Scrollable).evaluate().map<ScrollableState?>((Element element) {
-      if (element is StatefulElement) {
-        final state = element.state;
-        if (state is ScrollableState) {
-          return state;
-        }
-      }
-      return null;
-    }).firstWhere((state) {
-      final position = state?.position;
-      return position?.axisDirection == AxisDirection.down;
-    }, orElse: () => null);
-
+  if (autoHeight || autoWidth) {
     final renderObject = tester.renderObject(actualFinder);
 
-    var finalHeight = originalWindowSize.height;
-    if (scrollable != null && scrollable.position.extentAfter.isFinite) {
-      finalHeight = originalWindowSize.height + scrollable.position.extentAfter;
-    } else if (renderObject is RenderBox) {
-      finalHeight = renderObject.size.height;
+    if (renderObject is RenderBox) {
+      double targetWidth = originalWindowSize.width;
+      double targetHeight = originalWindowSize.height;
+
+      if (autoWidth) {
+        targetWidth = renderObject.size.width;
+      }
+      if (autoHeight) {
+        targetHeight = renderObject.size.height;
+      }
+
+      final adjustedSize = Size(targetWidth, targetHeight);
+      await tester.binding.setSurfaceSize(adjustedSize);
+      await tester.pumpAndSettle();
     }
-
-    final adjustedSize = Size(originalWindowSize.width, finalHeight);
-    await tester.binding.setSurfaceSize(adjustedSize);
-    tester.view.physicalSize = adjustedSize;
-
-    await tester.pump();
   }
 
   await expectLater(
@@ -291,11 +283,7 @@ Future<void> compareWithGolden(
     skip: shouldSkipGoldenGeneration,
   );
 
-  if (autoHeight == true) {
-    // Here we reset the window size to its original value to be clean
-    await tester.binding.setSurfaceSize(originalWindowSize);
-    tester.view.physicalSize = originalWindowSize;
-  }
+  if (autoHeight || autoWidth) await tester.binding.setSurfaceSize(originalWindowSize);
 }
 
 /// A function that primes all assets by just wasting time and hoping that it is enough for all assets to

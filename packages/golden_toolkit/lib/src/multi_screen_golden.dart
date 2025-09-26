@@ -50,13 +50,15 @@ Future<void> multiScreenGolden(
   WidgetTester tester,
   String name, {
   Finder? finder,
-  bool? autoHeight,
+  bool autoHeight = false,
+  bool autoWidth = false,
   double? overrideGoldenHeight,
   CustomPump? customPump,
   DeviceSetup? deviceSetup,
   List<Device>? devices,
-  @Deprecated('This method level parameter will be removed in an upcoming release. This can be configured globally. If you have concerns, please file an issue with your use case.')
-      bool? skip,
+  @Deprecated(
+      'This method level parameter will be removed in an upcoming release. This can be configured globally. If you have concerns, please file an issue with your use case.')
+  bool? skip,
 }) async {
   assert(devices == null || devices.isNotEmpty);
   final deviceSetupPump = deviceSetup ?? _twoPumps;
@@ -65,8 +67,7 @@ Future<void> multiScreenGolden(
       device,
       body: () async {
         if (overrideGoldenHeight != null) {
-          await tester.binding
-              .setSurfaceSize(Size(device.size.width, overrideGoldenHeight));
+          await tester.binding.setSurfaceSize(Size(device.size.width, overrideGoldenHeight));
         }
         await deviceSetupPump(device, tester);
         await compareWithGolden(
@@ -74,6 +75,7 @@ Future<void> multiScreenGolden(
           name,
           customPump: customPump,
           autoHeight: autoHeight,
+          autoWidth: autoWidth,
           finder: finder,
           skip: skip,
           device: device,
