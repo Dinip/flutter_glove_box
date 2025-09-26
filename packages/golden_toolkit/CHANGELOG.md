@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.9
+
+- Remove default black color in GoldenTextStyle from 0.16.7
+
 ## 0.16.8
 
 - Export missing GoldenTextStyle from 0.16.7
