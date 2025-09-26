@@ -13,5 +13,6 @@ export 'src/device_builder.dart';
 export 'src/font_loader.dart' show loadAppFonts;
 export 'src/golden_builder/golden_builder.dart';
 export 'src/multi_screen_golden.dart';
+export 'src/styles/golden_text_style.dart';
 export 'src/testing_tools.dart' hide compareWithGolden;
 export 'src/widget_tester_extensions.dart';
