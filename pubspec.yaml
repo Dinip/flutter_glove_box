@@ -1,10 +1,27 @@
-# This only exists so that we can include pedantic in the top level
-# analysis_options.yaml. Each plugin should be published from its own
-# subdirectory underneath packages/.
-name: flutter_glove_box
-dev_dependencies:
-  pedantic: ^1.9.0
-publish_to: none
+name: feels_golden
+description: Common patterns for screenshot-based widget testing using Goldens. Forked from the eBay's flutter_glove_box repository.
+version: 0.16.9
+homepage: https://github.com/Dinip/feels_golden/
+repository: https://github.com/Dinip/feels_golden/
+issue_tracker: https://github.com/Dinip/feels_golden/issues
+# Original repository (now abandoned): https://github.com/eBay/flutter_glove_box/
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: '>=3.6.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  meta: ^1.15.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  test_api: ^0.7.0
+
+flutter:
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: packages/feels_golden/fonts/Roboto-Regular.ttf

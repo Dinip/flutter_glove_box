@@ -1,30 +1,72 @@
-# Flutter Glove Box
+# Feels Golden
 
-## This repo is no longer maintained
+**This is a fork of the golden_toolkit package from the abandoned [flutter_glove_box](https://github.com/ebay/flutter_glove_box) repository.**
 
-09/12/2024 Update:
+## About
 
-Unfortunately we have made the tough decision to no longer actively maintain this repository. While the package has served us and the community well, we don't have the capacity to give it the attention it deserves. 
+Feels Golden provides common patterns for screenshot-based widget testing using Goldens. It was originally developed by the eBay Motors App team as part of their flutter_glove_box testing toolkit.
 
-We realize that this decision means that open pull requests will not be merged. Our hope is that the community will rally and focus their efforts around more actively maintained packages for aiding in golden-based tests.
+## Original Repository Notice
 
-Once again, we want to thank each and every one of you for your contributions over the years. 
+The original flutter_glove_box repository was discontinued on 09/12/2024 with the following message from the eBay Motors App team:
 
-Thank you for your understanding.
+> Unfortunately we have made the tough decision to no longer actively maintain this repository. While the package has served us and the community well, we don't have the capacity to give it the attention it deserves.
 
-Best regards, 
+This fork aims to continue maintaining and improving the golden testing toolkit for the Flutter community.
 
-The eBay Motors App team
+## Installation
 
----------------------------------------------
+Add this to your package's `pubspec.yaml` file:
 
-* [given_when_then](packages/given_when_then/)
-* [golden_toolkit](packages/golden_toolkit/)
-* [page_object](packages/page_object/)
+```yaml
+dependencies:
+  feels_golden: ^0.16.9
+```
 
-Contains various testing tools that eBay Motors App team is using in their development on daily basis.
+## Usage
 
-## License Information
+Feels Golden makes it easy to generate and compare golden files for your Flutter widgets. Here's a simple example:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:feels_golden/feels_golden.dart';
+
+void main() {
+  group('Golden tests', () {
+    testGoldens('MyWidget golden test', (tester) async {
+      final builder = DeviceBuilder()
+        ..overrideDevicesForAllScenarios(devices: [
+          Device.phone,
+          Device.iphone11,
+          Device.tabletPortrait,
+        ])
+        ..addScenario(
+          widget: MyWidget(),
+          name: 'default',
+        );
+      
+      await tester.pumpDeviceBuilder(builder);
+      await screenMatchesGolden(tester, 'my_widget');
+    });
+  });
+}
+```
+
+## Features
+
+- **Multi-device testing**: Test your widgets across multiple device configurations
+- **Consistent golden generation**: Ensures consistent font rendering across different platforms
+- **Flexible device configurations**: Predefined device configurations or create your own
+- **Easy integration**: Works seamlessly with Flutter's existing test framework
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+This project maintains the same BSD 3-Clause License as the original flutter_glove_box repository.
 
 Copyright 2019-2023 eBay Inc.
 
