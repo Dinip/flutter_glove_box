@@ -5,6 +5,7 @@
 /// license that can be found in the LICENSE file or at
 /// https://opensource.org/licenses/BSD-3-Clause
 /// ***************************************************
+library;
 
 import 'package:flutter/material.dart';
 
@@ -78,10 +79,7 @@ class WeatherForecast extends StatelessWidget {
 }
 
 class WeeklyForecastExpanded extends StatelessWidget {
-  const WeeklyForecastExpanded({
-    Key? key,
-    required this.forecasts,
-  }) : super(key: key);
+  const WeeklyForecastExpanded({required this.forecasts, super.key});
 
   final List<Forecast> forecasts;
 
@@ -110,10 +108,7 @@ class WeeklyForecastExpanded extends StatelessWidget {
 }
 
 class WeeklyForecastCompact extends StatelessWidget {
-  const WeeklyForecastCompact({
-    Key? key,
-    required this.forecasts,
-  }) : super(key: key);
+  const WeeklyForecastCompact({required this.forecasts, super.key});
 
   final List<Forecast> forecasts;
 
@@ -139,11 +134,11 @@ class WeeklyForecastCompact extends StatelessWidget {
 
 class WeatherCard extends StatelessWidget {
   const WeatherCard({
-    Key? key,
     required this.temp,
     required this.weather,
     this.day = 'Friday',
-  }) : super(key: key);
+    super.key,
+  });
 
   factory WeatherCard.forecast(Forecast forecast) {
     return WeatherCard(

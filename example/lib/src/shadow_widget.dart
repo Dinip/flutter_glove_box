@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 /// refactor and clean it up!
 
 class ShadowWidget extends StatelessWidget {
-  const ShadowWidget({Key? key}) : super(key: key);
+  const ShadowWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
