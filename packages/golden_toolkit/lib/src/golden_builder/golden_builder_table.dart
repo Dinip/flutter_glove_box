@@ -4,13 +4,50 @@ typedef TableColumnWidthMap = Map<int, TableColumnWidth>;
 
 class GoldenBuilderTable extends GoldenBuilder {
   /// Helper to create flexible columns with equal width distribution instead of the default [IntrinsicColumnWidth].
+  @Deprecated('Favor using GoldenBuilderTable.flex()')
   static TableColumnWidthMap flexibleColumns(int count) {
     return {for (var index in List.generate(count, (index) => index)) index: const FlexColumnWidth(1)};
   }
 
   /// Helper to create fixed width columns instead of the default [IntrinsicColumnWidth].
+  @Deprecated('Favor using GoldenBuilderTable.fixed(columnWidth: 100)')
   static TableColumnWidthMap fixedColumns({required int count, required double width}) {
     return {for (var index in List.generate(count, (index) => index)) index: FixedColumnWidth(width)};
+  }
+
+  factory GoldenBuilderTable.flex({
+    required int columns,
+    double columnSpacing = 16.0,
+    WidgetWrapper? wrap,
+    GoldenTextStyle titleTextStyle = const GoldenTextStyle(),
+    Color? bgColor,
+  }) {
+    return GoldenBuilderTable(
+      columns: columns,
+      columnSpacing: columnSpacing,
+      columnWidths: GoldenBuilderTable.flexibleColumns(columns),
+      wrap: wrap,
+      titleTextStyle: titleTextStyle,
+      bgColor: bgColor,
+    );
+  }
+
+  factory GoldenBuilderTable.fixed({
+    required int columns,
+    required double columnWidth,
+    double columnSpacing = 16.0,
+    WidgetWrapper? wrap,
+    GoldenTextStyle titleTextStyle = const GoldenTextStyle(),
+    Color? bgColor,
+  }) {
+    return GoldenBuilderTable(
+      columns: columns,
+      columnSpacing: columnSpacing,
+      columnWidths: GoldenBuilderTable.fixedColumns(count: columns, width: columnWidth),
+      wrap: wrap,
+      titleTextStyle: titleTextStyle,
+      bgColor: bgColor,
+    );
   }
 
   GoldenBuilderTable({
