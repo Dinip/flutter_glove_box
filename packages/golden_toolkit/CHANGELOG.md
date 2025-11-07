@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.16.10
+
+- Add GoldenBuilderTable.flex() and GoldenBuilderTable.fixed() factory constructors for easier configuration of column widths
+- Deprecate GoldenBuilderTable.flexibleColumns and GoldenBuilderTable.fixedColumns static methods in favor of the new factory constructors
+
 ## 0.16.9
 
 - Remove default black color in GoldenTextStyle from 0.16.7
