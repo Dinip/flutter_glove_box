@@ -12,6 +12,7 @@ import '../styles/golden_text_style.dart';
 import '../testing_tools.dart';
 
 part 'golden_builder_column.dart';
+part 'golden_builder_full_screen.dart';
 part 'golden_builder_grid.dart';
 part 'golden_builder_single.dart';
 part 'golden_builder_table.dart';
