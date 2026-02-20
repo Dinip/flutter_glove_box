@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.11
+
+- Implement GoldenBuilderFullScreen for easier testing of full screen widgets and pages
+
 ## 0.16.10
 
 - Add GoldenBuilderTable.flex() and GoldenBuilderTable.fixed() factory constructors for easier configuration of column widths
